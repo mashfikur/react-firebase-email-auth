@@ -1,5 +1,6 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase.config";
+import toast from "react-hot-toast";
 
 const HeroRegister = () => {
   const handleSubmit = (e) => {
@@ -8,12 +9,19 @@ const HeroRegister = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
 
+    if (password.length < 6) {
+      toast.error("Password Should Be at least 6 charectars");
+      return;
+    }
+
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
+        toast.success("Created Account Successfully");
       })
       .catch((error) => {
         console.error(error);
+        toast.error(`${error.message.split(":")[1]}`);
       });
   };
 
@@ -41,6 +49,7 @@ const HeroRegister = () => {
                     name="email"
                     placeholder="email"
                     className="input input-bordered"
+                    required
                   />
                 </div>
                 <div className="form-control">
@@ -52,6 +61,7 @@ const HeroRegister = () => {
                     name="password"
                     placeholder="password"
                     className="input input-bordered"
+                    required
                   />
                   <label className="label">
                     <a href="#" className="label-text-alt link link-hover">
