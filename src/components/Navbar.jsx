@@ -12,6 +12,9 @@ const Navbar = () => {
       <li>
         <NavLink to="/register">Register</NavLink>
       </li>
+      <li>
+        <NavLink to="/hero-register">Hero Register</NavLink>
+      </li>
     </>
   );
 
@@ -43,7 +46,10 @@ const Navbar = () => {
               {navLinks}
             </ul>
           </div>
-          <a className=" capitalize font-semibold text-xl"> Email Authentication </a>
+          <a className=" capitalize font-semibold text-xl">
+            {" "}
+            Email Authentication{" "}
+          </a>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1">{navLinks}</ul>
