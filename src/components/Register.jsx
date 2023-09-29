@@ -6,6 +6,7 @@ import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 
 const Register = () => {
   const [showPass, setShowPass] = useState(false);
+  const [terms, setTerms] = useState(true);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ const Register = () => {
         toast.success("User Created Successfully");
         e.target.email.value = "";
         e.target.password.value = "";
+        setTerms(true)
       })
       .catch((error) => {
         console.error(error);
@@ -43,7 +45,7 @@ const Register = () => {
 
   return (
     <div>
-      <div className="text-center  ">
+      <div className=" text-center">
         <h3 className="text-2xl mb-4">Please Register Now</h3>
         <form onSubmit={handleSubmit} className="space-y-6">
           <input
@@ -65,13 +67,23 @@ const Register = () => {
             onClick={handleShow}
             className="absolute -ml-8 pt-3 scale-125  cursor-pointer"
           >
-            {showPass ? <AiFillEyeInvisible></AiFillEyeInvisible> :  <AiFillEye></AiFillEye>}
+            {showPass ? (
+              <AiFillEyeInvisible></AiFillEyeInvisible>
+            ) : (
+              <AiFillEye></AiFillEye>
+            )}
           </span>
+          <br />
+          <div className="space-x-3">
+            <input onChange={() => setTerms(!terms)} type="checkbox" name="checkbox" id="terms"  />
+            <label htmlFor="terms">I accept Terms and Conditions</label>
+          </div>
           <br />
           <input
             className=" rounded-md btn btn-neutral "
             type="submit"
             value="Register"
+            disabled={terms}
           />
         </form>
       </div>
