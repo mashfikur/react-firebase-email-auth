@@ -1,19 +1,26 @@
-const Register = () => {
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../firebase.config";
 
-  const handleSubmit= (e) => {
-    e.preventDefault()
-    const email=e.target.email.value
-    const password=e.target.password.value
-    console.log(email,password)
-  }
+const Register = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div>
       <div className="text-center  ">
         <h3 className="text-2xl mb-4">Please Register Now</h3>
-        <form 
-        onSubmit={handleSubmit}
-        className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <input
             className="border bg-gray-200 rounded-md w-1/4 py-3 px-3"
             type="email"

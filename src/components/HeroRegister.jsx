@@ -1,13 +1,21 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../firebase.config";
+
 const HeroRegister = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const handleSubmit =(e) => {
-        e.preventDefault()
+    const email = e.target.email.value;
+    const password = e.target.password.value;
 
-        const email=e.target.email.value
-        const password=e.target.password.value
-
-        console.log(email,"---",password)
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div>
@@ -23,7 +31,7 @@ const HeroRegister = () => {
           </div>
           <div className="card flex-shrink-0 w-full max-w-sm shadow-2xl bg-base-100">
             <div className="card-body">
-              <form onSubmit={handleSubmit} >
+              <form onSubmit={handleSubmit}>
                 <div className="form-control">
                   <label className="label">
                     <span className="label-text">Email</span>
