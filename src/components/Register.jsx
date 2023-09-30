@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+  updateProfile,
+} from "firebase/auth";
 import auth from "../firebase.config";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -12,6 +16,7 @@ const Register = () => {
     e.preventDefault();
     const email = e.target.email.value;
     const password = e.target.password.value;
+    const name = e.target.name.value;
 
     // password validation and regex usecase
 
@@ -27,15 +32,24 @@ const Register = () => {
 
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
-        console.log(result.user);
         e.target.email.value = "";
         e.target.password.value = "";
-        setTerms(true)
+        e.target.name.value = "";
+        setTerms(true);
 
+        // updating users profile
+        updateProfile(result.user, {
+          displayName: `${name}`,
+        }).then(() => {
+
+        })
+        .catch((error) => {
+          toast.error(error.message)
+        })
         // sending a verfication link
-        sendEmailVerification(result.user)
-        .then(() => toast.success("Please check your email to veify your account"))
-
+        sendEmailVerification(result.user).then(() =>
+          toast.success("Please check your email to veify your account")
+        );
       })
       .catch((error) => {
         console.error(error);
@@ -52,6 +66,14 @@ const Register = () => {
       <div className=" text-center">
         <h3 className="text-2xl mb-4">Please Register Now</h3>
         <form onSubmit={handleSubmit} className="space-y-6">
+          <input
+            className="border bg-gray-200 rounded-md w-1/4 py-3 px-3"
+            type="text"
+            name="name"
+            placeholder="Your name"
+            required
+          />
+          <br />
           <input
             className="border bg-gray-200 rounded-md w-1/4 py-3 px-3"
             type="email"
@@ -79,7 +101,12 @@ const Register = () => {
           </span>
           <br />
           <div className="space-x-3">
-            <input onChange={() => setTerms(!terms)} type="checkbox" name="checkbox" id="terms"  />
+            <input
+              onChange={() => setTerms(!terms)}
+              type="checkbox"
+              name="checkbox"
+              id="terms"
+            />
             <label htmlFor="terms">I accept Terms and Conditions</label>
           </div>
           <br />
