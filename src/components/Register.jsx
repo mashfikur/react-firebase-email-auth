@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, sendEmailVerification } from "firebase/auth";
 import auth from "../firebase.config";
 import toast from "react-hot-toast";
 import { useState } from "react";
@@ -28,10 +28,14 @@ const Register = () => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
-        toast.success("User Created Successfully");
         e.target.email.value = "";
         e.target.password.value = "";
         setTerms(true)
+
+        // sending a verfication link
+        sendEmailVerification(result.user)
+        .then(() => toast.success("Please check your email to veify your account"))
+
       })
       .catch((error) => {
         console.error(error);

@@ -1,4 +1,4 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { sendPasswordResetEmail, signInWithEmailAndPassword } from "firebase/auth";
 import { useRef, useState } from "react";
 import auth from "../firebase.config";
 import toast from "react-hot-toast";
@@ -30,7 +30,7 @@ const Login = () => {
         toast.success("Logged In Successfully");
       })
       .catch((error) => {
-        toast.error(`${error.message}`);
+        setShowError(`${error.message.split(':')[1]}`);
       });
   };
 
@@ -45,14 +45,22 @@ const Login = () => {
       setShowError("Enter Your email");
       return;
     } else if (
-      !/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(emailField)
+      !/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(emailField)
     ) {
       setShowError("Please Enter a Valid Email");
       return;
     }
 
     // sending a password reset email 
-    
+    sendPasswordResetEmail(auth,emailField)
+    .then(() => {
+      toast.success("Please Check Your Email")
+      emailRef.current.value=""
+    })
+    .catch((error) => {
+      toast.error(`${error.message}`)
+    })
+
   };
 
   return (
